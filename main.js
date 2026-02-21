@@ -90,7 +90,7 @@ document.querySelectorAll('.faq-q').forEach(function(q){
     var success6=form.querySelector('#success_6mo')?.value.trim()||'';
     var budget=form.querySelector('#budget')?.value||'';
     var hearAbout=form.querySelector('#hear_about')?.value.trim()||'';
-    var smsConsent=form.querySelector('#sms_consent')?.checked||false;
+    // SMS consent handled via checkboxes below
 
     var payload={
       first_name:firstName,
@@ -112,7 +112,8 @@ document.querySelectorAll('.faq-q').forEach(function(q){
     if(success6) payload.customFields.push({id:'YVnf84CYQYzvyEnKsji5',field_value:success6});
     if(budget) payload.customFields.push({id:'cleCpHNcdpUnbh1moljS',field_value:budget});
     if(hearAbout) payload.customFields.push({id:'R1zAb8wUz8lvTecuKQqN',field_value:hearAbout});
-    if(smsConsent) payload.tags.push('DTS-SMS-Consent');
+    if(document.getElementById('sms_transactional')&&document.getElementById('sms_transactional').checked) payload.tags.push('DTS-SMS-Transactional');
+    if(document.getElementById('sms_marketing')&&document.getElementById('sms_marketing').checked) payload.tags.push('DTS-SMS-Marketing');
 
     try{
       var resp=await fetch('/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
