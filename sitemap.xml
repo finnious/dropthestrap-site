@@ -54,4 +54,10 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+  <loc>https://www.dropthestrap.com/optin</loc>
+  <lastmod>2026-02-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.3</priority>
+</url>
 </urlset>
