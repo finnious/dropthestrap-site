@@ -23,15 +23,19 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 /* --- Deferred Analytics: Clicky + GA4 sendBeacon --- */
 (function(){
   function loadAnalytics(){
-    /* Clicky — Site ID 101416291 */
+    /* Clicky — standard init pattern with deferred loading
+       Uses clicky.init() which properly registers the clicky object
+       for pageview tracking, goals, and event logging */
     if(typeof window.CLICKY_SITE_ID!=='undefined'){
       var cs=document.createElement('script');
-      cs.async=true;cs.src='//static.getclicky.com/js';
+      cs.async=true;
+      cs.src='//static.getclicky.com/js';
+      cs.onload=function(){
+        try{clicky.init(window.CLICKY_SITE_ID)}catch(e){}
+      };
       document.body.appendChild(cs);
-      window.clicky_site_ids=window.clicky_site_ids||[];
-      window.clicky_site_ids.push(window.CLICKY_SITE_ID);
     }
-    /* GA4 via sendBeacon — Measurement ID G-G4BZTKG18M */
+    /* GA4 via sendBeacon — lightweight, no gtag.js */
     if(typeof window.GA4_ID!=='undefined'&&navigator.sendBeacon){
       var p=new URLSearchParams({v:'2',tid:window.GA4_ID,cid:Math.random().toString(36).substring(2)+'.'+Date.now(),en:'page_view',dl:location.href,dt:document.title,dr:document.referrer,ul:navigator.language||'',sr:screen.width+'x'+screen.height});
       navigator.sendBeacon('https://www.google-analytics.com/g/collect',p);
@@ -90,7 +94,6 @@ document.querySelectorAll('.faq-q').forEach(function(q){
     var success6=form.querySelector('#success_6mo')?.value.trim()||'';
     var budget=form.querySelector('#budget')?.value||'';
     var hearAbout=form.querySelector('#hear_about')?.value.trim()||'';
-    // SMS consent handled via checkboxes below
 
     var payload={
       first_name:firstName,
@@ -122,8 +125,15 @@ document.querySelectorAll('.faq-q').forEach(function(q){
         form.style.display='none';
         successDiv.style.display='block';
         successDiv.textContent="Submission received. We review every form within 48 hours. If there's a fit, you'll hear from us.";
-        /* Track form submission in Clicky */
-        if(typeof clicky!=='undefined'){clicky.goal('form_submit')}
+        /* Track form submission — goal + event for redundancy */
+        try{
+          if(typeof clicky!=='undefined'&&typeof clicky.goal==='function'){
+            clicky.goal('Contact Form Submitted');
+          }
+          if(typeof clicky!=='undefined'&&typeof clicky.log==='function'){
+            clicky.log('#contact/form-submit','Contact Form Submitted');
+          }
+        }catch(e){}
       }else{
         errDiv.textContent='Something went wrong. Try again or email us directly.';
         errDiv.style.display='block';
