@@ -97,9 +97,9 @@
 
 <p><strong>Message Frequency:</strong> Message frequency varies. Transactional messages are sent only in relation to services you've purchased or inquired about. Marketing messages are limited and sent only when we have something relevant to share.</p>
 
-<p><strong>Opt-Out:</strong> You can opt out at any time by replying STOP to any message. You can also contact us at <a href="mailto:scott@creatingvaluellc.com">scott@creatingvaluellc.com</a> to update your preferences.</p>
+<p><strong>Opt-Out:</strong> You can opt out at any time by replying STOP to any message. You can also contact us at <a href="mailto:hello@dropthestrap.com">hello@dropthestrap.com</a> to update your preferences.</p>
 
-<p><strong>Help:</strong> Reply HELP to any message for assistance, or contact us at <a href="mailto:scott@creatingvaluellc.com">scott@creatingvaluellc.com</a>.</p>
+<p><strong>Help:</strong> Reply HELP to any message for assistance, or contact us at <a href="mailto:hello@dropthestrap.com">hello@dropthestrap.com</a>.</p>
 
 <p><strong>Message &amp; Data Rates:</strong> Standard message and data rates may apply. Check with your carrier for details.</p>
 
@@ -169,7 +169,13 @@
         form.style.display='none';
         successDiv.style.display='block';
         successDiv.textContent="SMS preferences saved. You're all set.";
-        if(typeof clicky!=='undefined'){clicky.goal('sms_optin')}
+        /* Clicky — goal + event per playbook standard */
+        try{
+          if(typeof clicky!=='undefined'){
+            if(typeof clicky.goal==='function') clicky.goal('SMS Opt-In Submitted');
+            if(typeof clicky.log==='function') clicky.log('#optin/sms-submit','SMS Opt-In Submitted');
+          }
+        }catch(e){}
       }else{
         errDiv.textContent='Something went wrong. Try again or email us directly.';
         errDiv.style.display='block';
