@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clicky Goal Test — Drop The Strap Marketing</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#e5e5e5;max-width:600px;margin:40px auto;padding:20px}
+h1{color:#d4a843;font-size:1.5rem}
+button{background:#d4a843;color:#0a0a0a;border:none;padding:12px 24px;font-size:1rem;font-weight:700;cursor:pointer;border-radius:4px;margin:10px 10px 10px 0}
+button:hover{background:#c49a38}
+#log{margin-top:20px;padding:16px;background:#1a1a1a;border:1px solid #333;border-radius:4px;font-family:monospace;font-size:.85rem;white-space:pre-wrap;min-height:200px}
+.pass{color:#4ade80}
+.fail{color:#f87171}
+.info{color:#60a5fa}
+</style>
+</head>
+<body>
+<h1>Clicky Goal Test Page</h1>
+<p>This page tests whether Clicky loads correctly and goals fire. Open your Clicky dashboard to Goals after clicking the buttons below.</p>
+
+<button id="btn-goal">Fire Test Goal</button>
+<button id="btn-event">Fire Test Event</button>
+<button id="btn-both">Fire Both</button>
+<button id="btn-check">Check Clicky Status</button>
+
+<div id="log"></div>
+
+<!-- Analytics IDs — same pattern as all DTS pages -->
+<script>window.CLICKY_SITE_ID=101416291;window.GA4_ID='G-G4BZTKG18M';</script>
+
+<!-- Clicky loader — identical to the pattern in main.js -->
+<script>
+(function(){
+  var log=document.getElementById('log');
+  function out(msg,cls){
+    var span=document.createElement('span');
+    span.className=cls||'info';
+    span.textContent=(new Date()).toLocaleTimeString()+' — '+msg+'\n';
+    log.appendChild(span);
+  }
+
+  /* --- Load Clicky using the exact same pattern as main.js --- */
+  function loadClicky(){
+    out('Loading Clicky script from //static.getclicky.com/js ...');
+    var cs=document.createElement('script');
+    cs.async=true;
+    cs.src='//static.getclicky.com/js';
+    cs.onload=function(){
+      out('Clicky script loaded.');
+      try{
+        clicky.init(window.CLICKY_SITE_ID);
+        out('clicky.init('+window.CLICKY_SITE_ID+') called.','pass');
+      }catch(e){
+        out('clicky.init() FAILED: '+e.message,'fail');
+      }
+      /* Check what's available */
+      setTimeout(function(){
+        out('typeof clicky = '+typeof clicky);
+        out('typeof clicky.goal = '+(typeof clicky!=='undefined'?typeof clicky.goal:'N/A'));
+        out('typeof clicky.log = '+(typeof clicky!=='undefined'?typeof clicky.log:'N/A'));
+        out('typeof clicky.pageview = '+(typeof clicky!=='undefined'?typeof clicky.pageview:'N/A'));
+        if(typeof clicky!=='undefined'&&typeof clicky.goal==='function'){
+          out('READY — Clicky is loaded and goal function is available.','pass');
+        }else{
+          out('PROBLEM — clicky object exists but goal function missing.','fail');
+        }
+      },500);
+    };
+    cs.onerror=function(){
+      out('Clicky script FAILED to load. Ad blocker? Network issue?','fail');
+    };
+    document.body.appendChild(cs);
+  }
+
+  /* Load after page ready, with 100ms delay — same as main.js */
+  if(document.readyState==='complete'){setTimeout(loadClicky,100)}
+  else{window.addEventListener('load',function(){setTimeout(loadClicky,100)})}
+
+  /* --- Button handlers --- */
+  document.getElementById('btn-goal').addEventListener('click',function(){
+    out('Attempting clicky.goal("Clicky Test Goal") ...');
+    try{
+      if(typeof clicky!=='undefined'&&typeof clicky.goal==='function'){
+        clicky.goal('Clicky Test Goal');
+        out('clicky.goal() called successfully. Check Clicky dashboard → Goals.','pass');
+      }else{
+        out('clicky.goal is not available. typeof clicky = '+typeof clicky,'fail');
+      }
+    }catch(e){
+      out('clicky.goal() threw error: '+e.message,'fail');
+    }
+  });
+
+  document.getElementById('btn-event').addEventListener('click',function(){
+    out('Attempting clicky.log("#test/event","Clicky Test Event") ...');
+    try{
+      if(typeof clicky!=='undefined'&&typeof clicky.log==='function'){
+        clicky.log('#test/event','Clicky Test Event');
+        out('clicky.log() called successfully. Check Clicky dashboard → Events.','pass');
+      }else{
+        out('clicky.log is not available. typeof clicky = '+typeof clicky,'fail');
+      }
+    }catch(e){
+      out('clicky.log() threw error: '+e.message,'fail');
+    }
+  });
+
+  document.getElementById('btn-both').addEventListener('click',function(){
+    out('Attempting both goal + event ...');
+    try{
+      if(typeof clicky!=='undefined'){
+        if(typeof clicky.goal==='function'){
+          clicky.goal('Clicky Test Goal');
+          out('Goal fired.','pass');
+        }else{out('clicky.goal not a function.','fail')}
+        if(typeof clicky.log==='function'){
+          clicky.log('#test/both','Clicky Test Both');
+          out('Event fired.','pass');
+        }else{out('clicky.log not a function.','fail')}
+      }else{
+        out('clicky is undefined.','fail');
+      }
+    }catch(e){
+      out('Error: '+e.message,'fail');
+    }
+  });
+
+  document.getElementById('btn-check').addEventListener('click',function(){
+    out('--- Status Check ---');
+    out('typeof clicky = '+typeof clicky);
+    if(typeof clicky==='undefined'){
+      out('Clicky is NOT loaded.','fail');
+      return;
+    }
+    out('typeof clicky.goal = '+typeof clicky.goal);
+    out('typeof clicky.log = '+typeof clicky.log);
+    out('typeof clicky.pageview = '+typeof clicky.pageview);
+    out('typeof clicky.init = '+typeof clicky.init);
+    /* Check if clicky_site_ids exists (old pattern) */
+    out('typeof window.clicky_site_ids = '+typeof window.clicky_site_ids);
+    if(typeof clicky.goal==='function'){
+      out('Goal function is available.','pass');
+    }else{
+      out('Goal function is NOT available.','fail');
+    }
+  });
+})();
+</script>
+</body>
+</html>
