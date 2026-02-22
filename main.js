@@ -23,7 +23,7 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 /* --- Deferred Analytics: Clicky + GA4 sendBeacon --- */
 (function(){
   function loadAnalytics(){
-    /* Clicky — replace XXXX with your Clicky site ID */
+    /* Clicky — Site ID 101416291 */
     if(typeof window.CLICKY_SITE_ID!=='undefined'){
       var cs=document.createElement('script');
       cs.async=true;cs.src='//static.getclicky.com/js';
@@ -31,7 +31,7 @@ document.querySelectorAll('.faq-q').forEach(function(q){
       window.clicky_site_ids=window.clicky_site_ids||[];
       window.clicky_site_ids.push(window.CLICKY_SITE_ID);
     }
-    /* GA4 via sendBeacon — replace G-XXXX with your measurement ID */
+    /* GA4 via sendBeacon — Measurement ID G-G4BZTKG18M */
     if(typeof window.GA4_ID!=='undefined'&&navigator.sendBeacon){
       var p=new URLSearchParams({v:'2',tid:window.GA4_ID,cid:Math.random().toString(36).substring(2)+'.'+Date.now(),en:'page_view',dl:location.href,dt:document.title,dr:document.referrer,ul:navigator.language||'',sr:screen.width+'x'+screen.height});
       navigator.sendBeacon('https://www.google-analytics.com/g/collect',p);
@@ -102,7 +102,7 @@ document.querySelectorAll('.faq-q').forEach(function(q){
 
     if(phone) payload.phone=phone;
 
-    /* Map open-text fields to GHL custom fields — IDs must be configured in GHL */
+    /* Map open-text fields to GHL custom fields — IDs configured in GHL */
     payload.customFields=[];
     if(businessName) payload.customFields.push({id:'XZpGQTm7YUptsXfTwb3h',field_value:businessName});
     if(businessUrl) payload.customFields.push({id:'quK2obCsKpq7QiigwRxt',field_value:businessUrl});
@@ -122,6 +122,8 @@ document.querySelectorAll('.faq-q').forEach(function(q){
         form.style.display='none';
         successDiv.style.display='block';
         successDiv.textContent="Submission received. We review every form within 48 hours. If there's a fit, you'll hear from us.";
+        /* Track form submission in Clicky */
+        if(typeof clicky!=='undefined'){clicky.goal('form_submit')}
       }else{
         errDiv.textContent='Something went wrong. Try again or email us directly.';
         errDiv.style.display='block';
