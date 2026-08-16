@@ -71,11 +71,16 @@ document.querySelectorAll('.faq-q').forEach(function(q){
     successDiv.style.display='none';
 
     var firstName=form.querySelector('#first_name').value.trim();
-    var lastName=form.querySelector('#last_name')?.value.trim()||'';
     var email=form.querySelector('#email').value.trim();
+    var urlField=form.querySelector('#business_url');
+    var businessUrl=(urlField&&urlField.value||'').trim();
+    if(businessUrl&&!/^https?:\/\//i.test(businessUrl)){
+      businessUrl='https://'+businessUrl;
+      urlField.value=businessUrl;
+    }
 
-    if(!firstName||!email){
-      errDiv.textContent='Name and email are required.';
+    if(!firstName||!email||!businessUrl){
+      errDiv.textContent='First name, email, and website URL are required.';
       errDiv.style.display='block';
       return;
     }
@@ -84,37 +89,25 @@ document.querySelectorAll('.faq-q').forEach(function(q){
     var origText=btn.textContent;
     btn.textContent='Submitting...';
 
-    /* Build payload */
+    /* Build payload — URL inbox fields only */
     var phone=form.querySelector('#phone')?.value.trim()||'';
-    var businessName=form.querySelector('#business_name')?.value.trim()||'';
-    var businessUrl=form.querySelector('#business_url')?.value.trim()||'';
-    var whatSell=form.querySelector('#what_sell')?.value.trim()||'';
-    var challenge=form.querySelector('#challenge')?.value.trim()||'';
-    var prevSeo=form.querySelector('#prev_seo')?.value.trim()||'';
-    var success6=form.querySelector('#success_6mo')?.value.trim()||'';
-    var budget=form.querySelector('#budget')?.value||'';
-    var hearAbout=form.querySelector('#hear_about')?.value.trim()||'';
+    var findFor=form.querySelector('#find_for')?.value.trim()||'';
 
     var payload={
       first_name:firstName,
-      last_name:lastName,
+      last_name:'',
       email:email,
+      business_url:businessUrl,
       source:'DTS Website - Contact Form',
       tags:['DTS-Website-Lead','DTS-Contact']
     };
 
     if(phone) payload.phone=phone;
 
-    /* Map open-text fields to GHL custom fields — IDs configured in GHL */
+    /* Map fields to existing GHL custom field IDs */
     payload.customFields=[];
-    if(businessName) payload.customFields.push({id:'XZpGQTm7YUptsXfTwb3h',field_value:businessName});
-    if(businessUrl) payload.customFields.push({id:'quK2obCsKpq7QiigwRxt',field_value:businessUrl});
-    if(whatSell) payload.customFields.push({id:'CB6C0Pftq3iBazSNAGn7',field_value:whatSell});
-    if(challenge) payload.customFields.push({id:'g3zBs1d6Gmpiqwu5StKI',field_value:challenge});
-    if(prevSeo) payload.customFields.push({id:'HOcOg3xYNF7dCddAza8h',field_value:prevSeo});
-    if(success6) payload.customFields.push({id:'YVnf84CYQYzvyEnKsji5',field_value:success6});
-    if(budget) payload.customFields.push({id:'cleCpHNcdpUnbh1moljS',field_value:budget});
-    if(hearAbout) payload.customFields.push({id:'R1zAb8wUz8lvTecuKQqN',field_value:hearAbout});
+    payload.customFields.push({id:'quK2obCsKpq7QiigwRxt',field_value:businessUrl});
+    if(findFor) payload.customFields.push({id:'CB6C0Pftq3iBazSNAGn7',field_value:findFor});
     if(document.getElementById('sms_transactional')&&document.getElementById('sms_transactional').checked) payload.tags.push('DTS-SMS-Transactional');
     if(document.getElementById('sms_marketing')&&document.getElementById('sms_marketing').checked) payload.tags.push('DTS-SMS-Marketing');
 
@@ -124,7 +117,7 @@ document.querySelectorAll('.faq-q').forEach(function(q){
       if(result.success){
         form.style.display='none';
         successDiv.style.display='block';
-        successDiv.textContent="Submission received. We review every form within 48 hours. If there's a fit, you'll hear from us.";
+        successDiv.textContent="We’ll look around. If there’s a fight worth taking, you’ll hear from us.";
         /* Track form submission — goal + event for redundancy */
         try{
           if(typeof clicky!=='undefined'&&typeof clicky.goal==='function'){

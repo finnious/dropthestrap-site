@@ -15,7 +15,7 @@ export async function onRequestPost(context) {
     try {
         const data = await request.json();
 
-        if (!data.first_name || !data.email) {
+        if (!data.first_name || !data.email || !data.business_url) {
             return new Response(
                 JSON.stringify({ success: false, error: 'Missing required fields' }),
                 { status: 400, headers: corsHeaders }
@@ -35,11 +35,19 @@ export async function onRequestPost(context) {
             ghlBody.phone = data.phone.trim();
         }
 
+        const urlFieldId = 'quK2obCsKpq7QiigwRxt';
+        let customFields = [];
         if (data.customFields && data.customFields.length > 0) {
-            ghlBody.customFields = data.customFields.map(field => ({
+            customFields = data.customFields.map(field => ({
                 id: field.id,
                 field_value: field.field_value || ''
             }));
+        }
+        if (data.business_url && !customFields.some(field => field.id === urlFieldId)) {
+            customFields.push({ id: urlFieldId, field_value: data.business_url });
+        }
+        if (customFields.length > 0) {
+            ghlBody.customFields = customFields;
         }
 
         const ghlResponse = await fetch(

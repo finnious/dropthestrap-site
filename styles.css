@@ -99,6 +99,10 @@ section{padding:var(--s8) 0}
 .form-group textarea{resize:vertical;min-height:100px}
 .form-group select{appearance:auto}
 .form-group .helper{font-size:.8rem;color:var(--gray);margin-top:var(--s1)}
+.form-group .optional,.form-group label .optional{color:var(--gray);font-weight:400}
+.inbox-form{max-width:520px;margin:0 auto;text-align:left}
+.hero .inbox-form{margin-top:var(--s5)}
+.hero .form-success,.hero .form-error{margin-left:auto;margin-right:auto}
 .form-check{display:flex;gap:var(--s2);align-items:flex-start;margin-bottom:var(--s4)}
 .form-check input[type="checkbox"]{margin-top:4px;accent-color:var(--gold)}
 .form-check label{font-size:.85rem;color:var(--gray-light);font-weight:400}
@@ -116,7 +120,7 @@ section{padding:var(--s8) 0}
 .site-footer{background:var(--dark);border-top:2px solid var(--dark-3);padding:var(--s7) 0 var(--s5)}
 .footer-grid{display:grid;gap:var(--s6);grid-template-columns:1fr;margin-bottom:var(--s6)}
 @media(min-width:640px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:768px){.footer-grid{grid-template-columns:2fr 1fr 1fr}}
+@media(min-width:768px){.footer-grid{grid-template-columns:2fr 1fr}}
 .footer-brand{font-weight:900;font-size:1.1rem;margin-bottom:var(--s3);color:var(--white)}.footer-brand .strap{color:var(--gold)}
 .footer-tagline{color:var(--gray);font-size:.9rem;line-height:1.6;max-width:35ch}
 .footer-col h4{color:var(--gold);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--s3)}
