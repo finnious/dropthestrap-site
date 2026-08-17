@@ -64,6 +64,18 @@ section{padding:var(--s8) 0}
 .hero{padding:var(--s9) 0 var(--s8);text-align:center;background:linear-gradient(180deg,var(--dark) 0%,var(--black) 100%)}
 .hero h1 .highlight{color:var(--gold);display:block}
 .hero p.lead{margin:0 auto var(--s6);max-width:55ch}
+.hero-letter{text-align:left;padding:var(--s8) 0 var(--s6)}
+.hero-letter h1{max-width:16ch}
+.hero-letter .lead{margin:0 0 var(--s5)}
+.letter h2{margin-top:0}
+.letter p{max-width:65ch}
+.workshop-embed{border:2px dashed var(--gold-dark);background:var(--dark-3);min-height:220px;display:flex;align-items:center;justify-content:center;border-radius:8px;margin:var(--s5) 0 var(--s2)}
+.workshop-embed-label{color:var(--gray);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;margin:0}
+.on-the-mat{border:2px solid var(--gold);background:var(--dark-2);padding:var(--s6);border-radius:8px}
+.on-the-mat h2{color:var(--gold);margin-bottom:var(--s4)}
+.on-the-mat p{max-width:none;color:var(--gray-light);margin-bottom:var(--s3)}
+.on-the-mat p:last-child{margin-bottom:0}
+.form-group .optional{color:var(--gray);font-weight:400}
 .hero-actions{display:flex;flex-wrap:wrap;gap:var(--s4);justify-content:center;margin-top:var(--s5)}
 .card{background:var(--dark-2);border:1px solid var(--dark-3);border-radius:8px;padding:var(--s6);transition:border-color .2s}
 .card:hover{border-color:var(--gold-dark)}
@@ -116,7 +128,7 @@ section{padding:var(--s8) 0}
 .site-footer{background:var(--dark);border-top:2px solid var(--dark-3);padding:var(--s7) 0 var(--s5)}
 .footer-grid{display:grid;gap:var(--s6);grid-template-columns:1fr;margin-bottom:var(--s6)}
 @media(min-width:640px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:768px){.footer-grid{grid-template-columns:2fr 1fr 1fr}}
+@media(min-width:768px){.footer-grid{grid-template-columns:2fr 1fr}}
 .footer-brand{font-weight:900;font-size:1.1rem;margin-bottom:var(--s3);color:var(--white)}.footer-brand .strap{color:var(--gold)}
 .footer-tagline{color:var(--gray);font-size:.9rem;line-height:1.6;max-width:35ch}
 .footer-col h4{color:var(--gold);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--s3)}
