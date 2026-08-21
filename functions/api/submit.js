@@ -1,3 +1,56 @@
+const CUSTOM_FIELD_KEYS = {
+    CB6C0Pftq3iBazSNAGn7: 'business_does',
+    g3zBs1d6Gmpiqwu5StKI: 'ideal_customer',
+    YVnf84CYQYzvyEnKsji5: 'become_customer',
+    quK2obCsKpq7QiigwRxt: 'business_url'
+};
+
+function buildNotifyBody(data, result) {
+    const body = {};
+    const stableKeys = ['first_name', 'last_name', 'email', 'phone', 'source', 'tags'];
+
+    for (const key of stableKeys) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+            body[key] = data[key];
+        }
+    }
+
+    const contactId = result && result.contact && result.contact.id;
+    if (contactId) {
+        body.contactId = contactId;
+    }
+
+    const customKeys = ['business_does', 'ideal_customer', 'become_customer', 'business_url'];
+    for (const key of customKeys) {
+        if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+            body[key] = data[key];
+        }
+    }
+
+    if (Array.isArray(data.customFields)) {
+        for (const field of data.customFields) {
+            const key = field && CUSTOM_FIELD_KEYS[field.id];
+            if (key && field.field_value) {
+                body[key] = field.field_value;
+            }
+        }
+    }
+
+    return body;
+}
+
+async function notifyDtsWebhook(url, data, result) {
+    try {
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(buildNotifyBody(data, result))
+        });
+    } catch (_) {
+        // Best-effort only. Never fail the form because notify failed.
+    }
+}
+
 export async function onRequestPost(context) {
     const { request, env } = context;
 
@@ -65,6 +118,15 @@ export async function onRequestPost(context) {
         }
 
         const result = await ghlResponse.json();
+
+        if (env.DTS_NOTIFY_WEBHOOK) {
+            const notifyTask = notifyDtsWebhook(env.DTS_NOTIFY_WEBHOOK, data, result);
+            if (typeof context.waitUntil === 'function') {
+                context.waitUntil(notifyTask);
+            } else {
+                await notifyTask;
+            }
+        }
 
         return new Response(
             JSON.stringify({
