@@ -1,7 +1,7 @@
 const CUSTOM_FIELD_KEYS = {
-    CB6C0Pftq3iBazSNAGn7: 'business_does',
-    g3zBs1d6Gmpiqwu5StKI: 'ideal_customer',
-    YVnf84CYQYzvyEnKsji5: 'become_customer',
+    WnecrvzDcR7VmyyHyWd9: 'business_does',
+    '6mGlQKiJJVCRSUY5GAXT': 'ideal_customer',
+    '6Uo4l4EQZCQqnGscL5p4': 'become_customer',
     quK2obCsKpq7QiigwRxt: 'business_url'
 };
 
