@@ -92,7 +92,7 @@ document.querySelectorAll('.faq-q').forEach(function(q){
     var origText=btn.textContent;
     btn.textContent='Submitting...';
 
-    /* Build payload — who-you-serve fields mapped to existing GHL custom field IDs */
+    /* Build payload — who-you-serve answers mapped to DTS v2 GHL custom field IDs */
     var phone=form.querySelector('#phone')?.value.trim()||'';
 
     var payload={
@@ -106,9 +106,9 @@ document.querySelectorAll('.faq-q').forEach(function(q){
     if(phone) payload.phone=phone;
 
     payload.customFields=[];
-    payload.customFields.push({id:'CB6C0Pftq3iBazSNAGn7',field_value:businessDoes});
-    payload.customFields.push({id:'g3zBs1d6Gmpiqwu5StKI',field_value:idealCustomer});
-    payload.customFields.push({id:'YVnf84CYQYzvyEnKsji5',field_value:becomeCustomer});
+    payload.customFields.push({id:'WnecrvzDcR7VmyyHyWd9',field_value:businessDoes});
+    payload.customFields.push({id:'6mGlQKiJJVCRSUY5GAXT',field_value:idealCustomer});
+    payload.customFields.push({id:'6Uo4l4EQZCQqnGscL5p4',field_value:becomeCustomer});
     if(businessUrl) payload.customFields.push({id:'quK2obCsKpq7QiigwRxt',field_value:businessUrl});
     if(document.getElementById('sms_transactional')&&document.getElementById('sms_transactional').checked) payload.tags.push('DTS-SMS-Transactional');
     if(document.getElementById('sms_marketing')&&document.getElementById('sms_marketing').checked) payload.tags.push('DTS-SMS-Marketing');
